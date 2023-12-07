@@ -1,0 +1,53 @@
+大家都知道 Fibonacci 数列吧，f1=1,f2=1,f3=2,f4=3,…,fn=fn−1+fn−2。
+现在问题很简单，输入 n 和 m，求 fn 的前 n 项和 Snmodm。
+输入格式共一行，包含两个整数 n 和 m。
+输出格式输出前 n 项和 Sn mod m 的值。
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+typedef long long LL;
+const int N =3;
+int n,m;
+void mul(int c[],int b[],int a[][N])
+{
+    int temp[N]={0};
+    for(int i = 0;i<N;i++)
+      for(int j = 0;j<N;j++)
+       temp[i]=(temp[i]+b[j]*a[j][i])%m;//每行乘每列
+       
+    memcpy(c,temp,sizeof temp);
+}
+void mul(int c[][N],int b[][N],int a[][N])
+{
+    int temp[N][N]={0};
+    for(int i=0;i<N;i++)
+       for(int j=0;j<N;j++)
+         for(int k=0;k<N;k++)
+           temp[i][j]=(temp[i][j]+b[i][k]*a[k][j])%m;//每行乘每列
+    memcpy(c,temp,sizeof temp);
+}
+int main()
+{
+    cin >> n >> m;
+    n--;
+    int f1[N]={1,1,1}; //a1 a2 S1
+    int a[N][N]=
+    { 
+        {0,1,0},
+        {1,1,1},
+        {0,0,1}
+    };
+    while (n)
+    {
+        if(n&1) mul(f1,f1,a);
+        mul(a,a,a);
+        n >>= 1;
+    }
+    
+    cout << f1[2] << endl;
+    
+    return 0;
+}
